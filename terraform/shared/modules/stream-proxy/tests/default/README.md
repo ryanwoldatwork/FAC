@@ -1,6 +1,6 @@
 # Test the stream-proxy module
 1. Authenticate with cloud.gov (`cf login -a api.fr.cloud.gov --sso`)
-2. Copy `testconfig.sh-template` to `testconfig.sh` and edit to taste
+2. Copy `../../testconfig.sh-template` to `../../testconfig.sh` and edit to taste
 3. Set the `CF_USER` and `CF_PASSWORD` environment variables to a valid user for the test parameters
 4. Run `terraform init` to initialize the test Terraform environment
 5. Run `terraform apply` to deploy a test fixture app and the proxy

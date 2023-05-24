@@ -53,6 +53,13 @@ Credentials and route for the proxy are stored in the `${name}-creds` user-provi
 2. Adds network-policies so that clients can reach the proxy
 3. Creates a user-provided service instance in the client space with credentials
 
+## Testing
+
+1. Authenticate with cloud.gov (`cf login -a api.fr.cloud.gov --sso`)
+2. Copy `testconfig.sh-template` to `testconfig.sh` and edit to taste
+3. Set the `CF_USER` and `CF_PASSWORD` environment variables to a valid user for the test parameters
+4. Run `terraform test`
+
 ## TODO
 
 * Once it's possible, [create the UPSI in the egress space and share it to the client space](https://github.com/cloudfoundry-community/terraform-provider-cloudfoundry/issues/481)

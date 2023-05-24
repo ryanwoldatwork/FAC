@@ -5,6 +5,9 @@ terraform {
       source  = "cloudfoundry-community/cloudfoundry"
       version = "~>0.50.2"
     }
+    test = {
+      source = "terraform.io/builtin/test"
+    }
   }
 }
 
@@ -13,7 +16,7 @@ provider "cloudfoundry" {
 }
 
 data "external" "testconfig" {
-  program = ["/bin/sh", "${path.module}/testconfig.sh"]
+  program = ["/bin/sh", "${path.module}/../../testconfig.sh"]
 }
 
 locals {
@@ -97,6 +100,15 @@ data "external" "validate" {
     CLIENTNAME = "stream-client"
     ORGNAME    = local.cf_org_name
     SPACENAME  = local.cf_space_name
+  }
+}
+
+resource "test_assertions" "validation" {
+  component = "stream-proxy"
+  equal "test-result" {
+    description = "the validation script passed"
+    got = data.external.validate.result.status
+    want = "PASSED"
   }
 }
 

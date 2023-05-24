@@ -176,5 +176,4 @@ terraform/**/*.tfstate*
 terraform/**/*.tfvars
 terraform/shared/modules/egress-proxy/proxy.zip
 terraform/shared/modules/egress-proxy/test/client.zip
-terraform/shared/modules/stream-proxy/tests/default/testconfig.sh
-terraform/shared/modules/stream-proxy/tests/default/testconfig.sh
+terraform/shared/modules/stream-proxy/testconfig.sh
