@@ -8,29 +8,22 @@ terraform {
   }
 }
 
-variable "cf_org_name" {
-  type = string
-}
-variable "cf_space_name" {
-  type = string
-}
-variable "user" {
-  type = string
-}
-variable "password" {
-  type      = string
-  sensitive = true
-}
-
 provider "cloudfoundry" {
   api_url  = "https://api.fr.cloud.gov"
-  password = var.password
-  user     = var.user
+}
+
+data "external" "testconfig" {
+  program = ["/bin/sh", "${path.module}/testconfig.sh"]
+}
+
+locals {
+  cf_org_name   = data.external.testconfig.result.cf_org_name
+  cf_space_name = data.external.testconfig.result.cf_space_name
 }
 
 data "cloudfoundry_space" "client_space" {
-  org_name = var.cf_org_name
-  name     = var.cf_space_name
+  org_name = local.cf_org_name
+  name     = local.cf_space_name
 }
 
 # A test client app. We need it to exist so that there's something for the
@@ -53,7 +46,7 @@ data "cloudfoundry_domain" "default" {
 }
 
 resource "cloudfoundry_route" "stream-client" {
-  hostname = "${var.cf_org_name}-${replace(var.cf_space_name, ".", "-")}-stream-client"
+  hostname = "${local.cf_org_name}-${replace(local.cf_space_name, ".", "-")}-stream-client"
   space    = data.cloudfoundry_space.client_space.id
   domain   = data.cloudfoundry_domain.default.id
   target {
@@ -73,15 +66,13 @@ module "stream-proxy" {
   source = "./../.."
 
   name          = "stream-proxy"
-  cf_org_name   = var.cf_org_name
-  cf_space_name = var.cf_space_name
-  client_space  = var.cf_space_name
+  cf_org_name   = local.cf_org_name
+  cf_space_name = local.cf_space_name
+  client_space  = local.cf_space_name
   upstream      = "${local.proxydomain}:${local.proxyport}"
   clients       = ["stream-client"]
   instances     = 1
-  depends_on = [
-    cloudfoundry_route.stream-client
-  ]
+  depends_on    = [cloudfoundry_app.stream-client]
 }
 
 resource "cloudfoundry_network_policy" "connectback" {
@@ -104,8 +95,8 @@ data "external" "validate" {
   query = {
     APPNAME    = "stream-proxy"
     CLIENTNAME = "stream-client"
-    ORGNAME    = var.cf_org_name
-    SPACENAME  = var.cf_space_name
+    ORGNAME    = local.cf_org_name
+    SPACENAME  = local.cf_space_name
   }
 }
 

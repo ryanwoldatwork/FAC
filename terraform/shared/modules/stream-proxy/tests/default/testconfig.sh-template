@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Copy this file to testconfig.sh, then edit to taste. Don't commit your copy
+# to version control!
+
+cat << EOF
+{ 
+  "cf_org_name": "org-for-proxy",
+  "cf_space_name": "space-for-proxy"
+}
+EOF
