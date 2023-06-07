@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   db:
-    image: "postgres:11"
+    image: "postgres:12"
     environment:
       - "POSTGRES_HOST_AUTH_METHOD=trust"
     volumes:
@@ -17,7 +17,7 @@ services:
     command: /src/run.sh
     depends_on:
       - db
-      - localstack
+      - minio
     environment:
       - "DATABASE_URL=postgres://postgres@db/postgres"
       - "DJANGO_DEBUG=true"
@@ -40,22 +40,34 @@ services:
       - /src/node_modules
       - /src/staticfiles
   clamav-rest:
-    image: ajilaag/clamav-rest:20230220
-    # image: ghcr.io/gsa-tts/fac/clamav:latest
+    image: ghcr.io/gsa-tts/fac/clamav:latest
     environment:
       - MAX_FILE_SIZE=25M
       - SIGNATURE_CHECKS=1
     ports:
       - "9000:9000"
-  localstack:
-    container_name: "localstack_main"
-    image: localstack/localstack
+  minio:
+    container_name: "minio"
+    image: minio/minio
+    command: server /tmp/minio --console-address ":9002"
     ports:
-      - "4566:4566"
-    environment:
-      - SERVICES=s3
+      - "9001:9000"
+      - "9002:9002"
     volumes:
-      - "localstack-vol:/tmp/localstack"
+      - "minio-vol:/tmp/minio"
+  api:
+    image: ghcr.io/gsa-tts/fac/postgrest:latest
+    ports:
+      - "3000:3000"
+    expose:
+      - "3000"
+    environment:
+      PGRST_DB_URI: postgres://postgres@db:5432/postgres
+      PGRST_OPENAPI_SERVER_PROXY_URI: http://127.0.0.1:3000
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_DB_SCHEMAS: api
+    depends_on:
+      - db
 volumes:
   postgres-data:
-  localstack-vol:
+  minio-vol:

@@ -90,8 +90,8 @@ jobs:
       ALLOWED_HOSTS: '0.0.0.0 127.0.0.1 localhost'
       DISABLE_AUTH: False
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
       - name: Pull Docker Hub images
@@ -100,10 +100,6 @@ jobs:
       - name: Start services
         working-directory: ./backend
         run: docker-compose up -d
-      - name: Create LocalStack emulated S3 bucket
-        working-directory: ./backend
-        run:
-          docker-compose run web bash -c 'AWS_SECRET_ACCESS_ID="test" AWS_ACCESS_KEY_ID="test" awslocal s3 mb s3://gsa-fac-private-s3'
       - name: Run Django test suite
         working-directory: ./backend
         run:
@@ -114,4 +110,4 @@ jobs:
           npm install -g @lhci/cli@0.8.x
           lhci autorun
   validate-terraform:
-     uses: ./.github/workflows/terraform-lint.yml
+    uses: ./.github/workflows/terraform-lint.yml
