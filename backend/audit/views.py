@@ -26,6 +26,7 @@ from audit.mixins import (
     CertifyingAuditeeRequiredMixin,
     CertifyingAuditorRequiredMixin,
     SingleAuditChecklistAccessRequiredMixin,
+    SingleAuditChecklistMustBeEditableMixin,
 )
 from audit.models import (
     Access,
@@ -82,6 +83,13 @@ class EditSubmission(LoginRequiredMixin, generic.View):
 
 
 class ExcelFileHandlerView(SingleAuditChecklistAccessRequiredMixin, generic.View):
+    """
+    This view is expected to be accessed via JavaScript, as an XHR (hence no GET
+    method); the views for the pages users are expected to see are handled by
+    report_submission.views.UploadPageView
+
+    """
+
     FORM_SECTION_HANDLERS = {
         FORM_SECTIONS.FEDERAL_AWARDS_EXPENDED: (
             extract_federal_awards,
@@ -443,7 +451,7 @@ class SubmissionProgressView(SingleAuditChecklistAccessRequiredMixin, generic.Vi
             raise PermissionDenied("You do not have access to this audit.")
 
 
-class AuditInfoFormView(SingleAuditChecklistAccessRequiredMixin, generic.View):
+class AuditInfoFormView(SingleAuditChecklistMustBeEditableMixin, generic.View):
     def get(self, request, *args, **kwargs):
         report_id = kwargs["report_id"]
         try:
@@ -505,7 +513,7 @@ class PageInput:
         self.hint = hint
 
 
-class UploadReportView(SingleAuditChecklistAccessRequiredMixin, generic.View):
+class UploadReportView(SingleAuditChecklistMustBeEditableMixin, generic.View):
     def page_number_inputs(self):
         return [
             PageInput(
@@ -605,10 +613,10 @@ class UploadReportView(SingleAuditChecklistAccessRequiredMixin, generic.View):
                     "form": form,
                 }
                 return render(request, "audit/upload-report.html", context)
-        except SingleAuditChecklist.DoesNotExist:
-            raise PermissionDenied("You do not have access to this audit.")
-        except LateChangeError:
-            return render(request, "audit/no-late-changes.html")
+        # except SingleAuditChecklist.DoesNotExist:
+        #     raise PermissionDenied("You do not have access to this audit.")
+        # except LateChangeError:
+        #     return render(request, "audit/no-late-changes.html")
 
         except Exception as err:
             logger.info("Unexpected error in UploadReportView post.\n", err)

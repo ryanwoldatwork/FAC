@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 
+from audit.mixins import SingleAuditChecklistMustBeEditableMixin
 from audit.models import Access, SingleAuditChecklist, LateChangeError
 from audit.validators import validate_general_information_json
 
@@ -103,17 +104,12 @@ class AccessAndSubmissionFormView(LoginRequiredMixin, View):
         return redirect(reverse("report_submission:accessandsubmission"))
 
 
-class GeneralInformationFormView(LoginRequiredMixin, View):
+class GeneralInformationFormView(SingleAuditChecklistMustBeEditableMixin, View):
     def get(self, request, *args, **kwargs):
         report_id = kwargs["report_id"]
 
         try:
             sac = SingleAuditChecklist.objects.get(report_id=report_id)
-
-            # this should probably be a permission mixin
-            accesses = Access.objects.filter(sac=sac, user=request.user)
-            if not accesses:
-                raise PermissionDenied("You do not have access to this audit.")
 
             context = {
                 "audit_type": sac.audit_type,
@@ -194,7 +190,7 @@ class GeneralInformationFormView(LoginRequiredMixin, View):
         raise BadRequest()
 
 
-class UploadPageView(LoginRequiredMixin, View):
+class UploadPageView(SingleAuditChecklistMustBeEditableMixin, View):
     def get(self, request, *args, **kwargs):
         report_id = kwargs["report_id"]
 
@@ -245,9 +241,9 @@ class UploadPageView(LoginRequiredMixin, View):
         try:
             sac = SingleAuditChecklist.objects.get(report_id=report_id)
 
-            accesses = Access.objects.filter(sac=sac, user=request.user)
-            if not accesses:
-                raise PermissionDenied("You do not have access to this audit.")
+            # accesses = Access.objects.filter(sac=sac, user=request.user)
+            # if not accesses:
+            #     raise PermissionDenied("You do not have access to this audit.")
 
             # Context for every upload page
             context = {

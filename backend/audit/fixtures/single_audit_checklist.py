@@ -154,6 +154,8 @@ SACS = [
         "auditee_name": "Federal awards submitted",
         "post_create_callable": _post_create_federal_awards,
     },
+    {"auditee_name": "Fellowship of the Ring"},
+    {"auditee_name": "Nazgûl"},
 ]
 
 

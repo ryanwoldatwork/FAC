@@ -44,6 +44,31 @@ class SingleAuditChecklistAccessRequiredMixin(LoginRequiredMixin):
         return super().dispatch(request, *args, **kwargs)
 
 
+class SingleAuditChecklistMustBeEditableMixin(LoginRequiredMixin):
+    """
+    View mixin to ensure that edits aren't made to any SAC that doesn't have a
+    submission_status of in_progress.
+
+    Also checks for access; this effectively includes
+    SingleAuditChecklistAccessRequiredMixin so that both of them aren't needed as mixins
+    for a single class.
+    """
+
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        try:
+            sac = SingleAuditChecklist.objects.get(report_id=kwargs["report_id"])
+
+            if not has_access(sac, request.user):
+                raise PermissionDenied("You do not have access to this audit.")
+            if not sac.submission_status == sac.STATUS.IN_PROGRESS:
+                msg = "Further changes to audits that have been marked ready for certification are not permitted."
+                raise PermissionDenied(msg)
+        except SingleAuditChecklist.DoesNotExist as err:
+            raise PermissionDenied("You do not have access to this audit.") from err
+
+        return super().dispatch(request, *args, **kwargs)
+
+
 class CertifyingAuditeeRequiredMixin(LoginRequiredMixin):
     """
     View mixin to require that a user is logged in, has access to the submission, and has
