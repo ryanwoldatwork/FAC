@@ -9,4 +9,3 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         api_versions.create_live_views()
-        api_versions.create_functions()
