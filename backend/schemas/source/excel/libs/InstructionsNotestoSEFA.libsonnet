@@ -28,7 +28,7 @@
   },
   note_content: {
     instructions: [
-      'Enter the full text of the note. <b>Do not include charts, tables, or footnotes.</b> If there are any charts or tables within the text, enter “See the Notes to the SEFA for chart/table” instead.',
+      'Enter the full text of the note. Do not include charts, tables, or footnotes. If there are any charts or tables within the text, enter “See the Notes to the SEFA for chart/table” instead.',
      ],
   },
   contains_chart_or_table: {
