@@ -60,6 +60,8 @@ RUN chown -R 1001:123 "/root/.npm"
 
 COPY . /src/
 
+ENV DJANGO_SETTINGS_MODULE config.settings
+ENV DJANGO_CONFIGURATION Local
 RUN npm run build && python manage.py collectstatic
 
 # ------------------------------------------------------------

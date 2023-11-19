@@ -233,6 +233,7 @@ django==4.2.6 \
     # via
     #   -r ./requirements/requirements.in
     #   dj-database-url
+    #   django-configurations
     #   django-cors-headers
     #   django-csp
     #   django-dbbackup
@@ -243,6 +244,10 @@ django-cache-url==3.4.4 \
     --hash=sha256:5ca4760b4580b80e41279bc60d1e5c16a822e4e462265faab0a330701bb0ef9a \
     --hash=sha256:ef2cfacea361ee22e9b67d6ca941db22e0a9eaf892b67ca71cad52c62a17fd36
     # via environs
+django-configurations==2.5 \
+    --hash=sha256:63fa252c40dc88ea17b8b90f5f4a31a2726e586acb1ff0edc74c228c61f19e5d \
+    --hash=sha256:cf063b99ad30013df49eaa971bd8543deffb008ff080cf3a92955dbccfe81a5c
+    # via -r ./requirements/requirements.in
 django-cors-headers==4.2.0 \
     --hash=sha256:9ada212b0e2efd4a5e339360ffc869cb21ac5605e810afe69f7308e577ea5bde \
     --hash=sha256:f9749c6410fe738278bc2b6ef17f05195bc7b251693c035752d8257026af024f
