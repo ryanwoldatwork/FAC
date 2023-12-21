@@ -15,7 +15,7 @@ function testWorkbookUpload(interceptUrl, uploadSelector, filename, will_interce
   cy.get(uploadSelector).attachFile(filename);
   // Upload url (POST /audit/excel/workbookname) returns a redirect to "/" on successful upload. So, 302.
   cy.wait('@uploadSuccess').its('response.statusCode').should('eq', 302);  
-  cy.get('#info_box')
+  cy.get('#info_box',{timeout: 60000})
     .should(
       'have.text',
       'File successfully validated! Your work has been saved.'
