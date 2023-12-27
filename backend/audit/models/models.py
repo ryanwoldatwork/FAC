@@ -32,6 +32,10 @@ from audit.validators import (
     validate_audit_information_json,
     validate_component_page_numbers,
 )
+from semiconstants.internal.audit import (
+    AUDIT_TYPE,
+    SUBMISSION_STATUS,
+)
 from support.cog_over import compute_cog_over, record_cog_assignment
 from .submission_event import SubmissionEvent
 
@@ -260,47 +264,28 @@ class SingleAuditChecklist(models.Model, GeneralInformationMixin):  # type: igno
         return dict(self.STATUS_CHOICES)[self.submission_status]
 
     # Constants:
-    class STATUS:
-        """The states that a submission can be in."""
-
-        IN_PROGRESS = "in_progress"
-        READY_FOR_CERTIFICATION = "ready_for_certification"
-        AUDITOR_CERTIFIED = "auditor_certified"
-        AUDITEE_CERTIFIED = "auditee_certified"
-        CERTIFIED = "certified"
-        SUBMITTED = "submitted"
-        DISSEMINATED = "disseminated"
-
-    STATUS_CHOICES = (
-        (STATUS.IN_PROGRESS, "In Progress"),
-        (STATUS.READY_FOR_CERTIFICATION, "Ready for Certification"),
-        (STATUS.AUDITOR_CERTIFIED, "Auditor Certified"),
-        (STATUS.AUDITEE_CERTIFIED, "Auditee Certified"),
-        (STATUS.CERTIFIED, "Certified"),
-        (STATUS.SUBMITTED, "Submitted"),
-        (STATUS.DISSEMINATED, "Disseminated"),
-    )
-
-    USER_PROVIDED_ORGANIZATION_TYPE_CODE = (
-        ("state", _("State")),
-        ("local", _("Local Government")),
-        ("tribal", _("Indian Tribe or Tribal Organization")),
-        ("higher-ed", _("Institution of higher education (IHE)")),
-        ("non-profit", _("Non-profit")),
-        ("unknown", _("Unknown")),
-        ("none", _("None of these (for example, for-profit")),
-    )
-
-    AUDIT_TYPE_CODES = (
-        ("single-audit", _("Single Audit")),
-        ("program-specific", _("Program-Specific Audit")),
-    )
-
-    AUDIT_PERIOD = (
-        ("annual", _("Annual")),
-        ("biennial", _("Biennial")),
-        ("other", _("Other")),
-    )
+    # class STATUS:
+    #     """The states that a submission can be in."""
+    #
+    #     IN_PROGRESS = "in_progress"
+    #     READY_FOR_CERTIFICATION = "ready_for_certification"
+    #     AUDITOR_CERTIFIED = "auditor_certified"
+    #     AUDITEE_CERTIFIED = "auditee_certified"
+    #     CERTIFIED = "certified"
+    #     SUBMITTED = "submitted"
+    #     DISSEMINATED = "disseminated"
+    #
+    # STATUS_CHOICES = (
+    #     (STATUS.IN_PROGRESS, "In Progress"),
+    #     (STATUS.READY_FOR_CERTIFICATION, "Ready for Certification"),
+    #     (STATUS.AUDITOR_CERTIFIED, "Auditor Certified"),
+    #     (STATUS.AUDITEE_CERTIFIED, "Auditee Certified"),
+    #     (STATUS.CERTIFIED, "Certified"),
+    #     (STATUS.SUBMITTED, "Submitted"),
+    #     (STATUS.DISSEMINATED, "Disseminated"),
+    # )
+    STATUS = SUBMISSION_STATUS
+    STATUS_CHOICES = STATUS._friendly_tuple
 
     # 0. Meta data
     submitted_by = models.ForeignKey(User, on_delete=models.PROTECT)
@@ -328,7 +313,7 @@ class SingleAuditChecklist(models.Model, GeneralInformationMixin):  # type: igno
 
     # Q2 Type of Uniform Guidance Audit
     audit_type = models.CharField(
-        max_length=20, choices=AUDIT_TYPE_CODES, blank=True, null=True
+        max_length=20, choices=AUDIT_TYPE._friendly_tuple, blank=True, null=True
     )
 
     # General Information
