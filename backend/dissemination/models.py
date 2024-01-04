@@ -507,6 +507,20 @@ class SecondaryAuditor(models.Model):
         REPORT_ID_FK_HELP_TEXT,
     )
 
+class OneTimeAccess(models.Model):
+    id = models.TextField(
+        "auto-generated",
+    )
+    uuid = models.TextField(
+        "UUID4",
+    )
+    api_key_id = models.TextField(
+        "Api key Id for the user",
+    )
+    report_id = models.TextField(
+        "Report ID for the PDF being requested",
+    )
+
 
 class MigrationChangeRecord(models.Model):
     audit_year = models.TextField(blank=True, null=True)
