@@ -527,7 +527,7 @@ class TribalApiAccessKeyIds(models.Model):
         "Added date of the record",
     )
 
-class MigrationChangeRecord(models.Model):
+class MigrationInspectionRecord(models.Model):
     audit_year = models.TextField(blank=True, null=True)
     dbkey = models.TextField(blank=True, null=True)
     report_id = models.TextField(blank=True, null=True)
