@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS support_administrative_key_uuids;
+DROP TABLE IF EXISTS tribal_api_access_key_ids;
 
 CREATE TABLE tribal_api_access_key_ids
     (
