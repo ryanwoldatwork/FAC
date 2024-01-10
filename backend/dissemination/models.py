@@ -508,9 +508,7 @@ class SecondaryAuditor(models.Model):
     )
 
 class OneTimeAccess(models.Model):
-    id = models.TextField(
-        "auto-generated",
-    )
+    
     uuid = models.TextField(
         "UUID4",
     )
