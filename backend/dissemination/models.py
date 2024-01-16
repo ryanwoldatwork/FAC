@@ -512,6 +512,9 @@ class OneTimeAccess(models.Model):
     uuid = models.TextField(
         "UUID4",
     )
+    time_stamp = models.DateTimeField(
+        auto_now_add=True,
+    )
     api_key_id = models.TextField(
         "Api key Id for the user",
     )

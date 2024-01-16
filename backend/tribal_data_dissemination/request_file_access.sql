@@ -6,8 +6,29 @@ CREATE OR REPLACE FUNCTION request_file_access(
 $$
 DECLARE
     v_access_uuid VARCHAR(32);
+    v_has_permission BOOLEAN;
+    v_key_exists BOOLEAN;
+    v_key_added_date DATE;
 BEGIN
-    IF p_api_key_id IS NOT NULL THEN
+    -- Check if the user has tribal data access permission
+    SELECT api_v1_0_3_functions.has_tribal_data_access() INTO v_has_permission;
+
+    -- Check if the provided API key exists in tribal_api_access_key_ids
+    SELECT 
+        EXISTS(
+            SELECT 1
+            FROM tribal_api_access_key_ids
+            WHERE keyid = p_api_key_id
+        ) INTO v_key_exists;
+
+    -- Get the added date of the key from tribal_api_access_key_ids
+    SELECT added
+    INTO v_key_added_date
+    FROM tribal_api_access_key_ids
+    WHERE keyid = p_api_key_id;
+
+    -- Check if the key is less than 6 months old
+    IF p_api_key_id IS NOT NULL AND v_has_permission AND v_key_exists AND v_key_added_date >= CURRENT_DATE - INTERVAL '6 months' THEN
         -- Generate UUID (using PostgreSQL's gen_random_uuid function)
         SELECT REPLACE(gen_random_uuid()::text, '-', '') INTO v_access_uuid;
 
@@ -19,7 +40,7 @@ BEGIN
         RETURN json_build_object('access_uuid', v_access_uuid);
     ELSE
         -- Return an error for unauthorized access
-        RETURN json_build_object('error', 'Unauthorized access')::JSON;
+        RETURN json_build_object('error', 'Unauthorized access or key older than 6 months')::JSON;
     END IF;
 END;
 $$;
