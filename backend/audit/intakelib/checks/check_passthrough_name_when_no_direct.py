@@ -12,7 +12,7 @@ def appears_empty(v):
 def passthrough_name_when_no_direct(ir):
     is_direct = get_range_by_name(ir, "is_direct")
     passthrough_name = get_range_by_name(ir, "passthrough_name")
-    passthrough_number = get_range_by_name(ir, "passthrough_identifying_number")
+    passthrough_number = get_range_by_name(ir, "passthrough_identifying_number")    
 
     errors = []
     for ndx, (isd, pname, pnum) in enumerate(
@@ -33,7 +33,7 @@ def passthrough_name_when_no_direct(ir):
                     ),
                 )
             )
-
+        # If is_direct is N, then we need both passthrough name and passthrough number
         elif (isd == "N") and (pname is None):
             errors.append(
                 build_cell_error_tuple(
@@ -41,6 +41,16 @@ def passthrough_name_when_no_direct(ir):
                     is_direct,
                     ndx,
                     get_message("check_passthrough_name_when_no_direct"),
+                )
+            )
+        # If is_direct is N, then we need both passthrough name and passthrough number
+        elif (isd == "N") and (pnum is None):
+            errors.append(
+                build_cell_error_tuple(
+                    ir,
+                    is_direct,
+                    ndx,
+                    get_message("check_passthrough_number_when_no_direct"),
                 )
             )
         elif (isd == "Y") and pname:
