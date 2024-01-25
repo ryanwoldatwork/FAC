@@ -507,21 +507,17 @@ class SecondaryAuditor(models.Model):
         REPORT_ID_FK_HELP_TEXT,
     )
 
-class OneTimeAccess(models.Model):
-    
-    uuid = models.TextField(
-        "UUID4",
-    )
-    time_stamp = models.DateTimeField(
-        auto_now_add=True,
-    )
-    api_key_id = models.TextField(
-        "Api key Id for the user",
-    )
-    report_id = models.TextField(
-        "Report ID for the PDF being requested",
-    )
+class TribalApiAccessKeyIds(models.Model):
 
+    email = models.TextField(
+        "Email of the user",
+    )
+    key_id = models.TextField(
+        "Key ID for the api access",
+    )
+    date_added = models.DateField(
+        "Added date of the record",
+    )
 
 class MigrationChangeRecord(models.Model):
     audit_year = models.TextField(blank=True, null=True)
