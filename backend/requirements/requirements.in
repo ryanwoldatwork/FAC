@@ -4,6 +4,7 @@ cryptography>=41.0.6
 django-cors-headers
 django-csp
 django-dbbackup
+django-debug-toolbar
 django-storages[boto3]
 Django>=4.2.7
 djangorestframework
