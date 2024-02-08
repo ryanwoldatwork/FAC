@@ -505,7 +505,7 @@ STATE_ABBREVS = json.load(open(f"{SCHEMA_BASE_DIR}/States.json"))[
 ]
 
 ENABLE_DEBUG_TOOLBAR = (
-    env.bool("ENABLE_DEBUG_TOOLBAR", False) and ENVIRONMENT == "LOCAL" and not TEST_RUN
+    env.bool("ENABLE_DEBUG_TOOLBAR", False) and ENVIRONMENT == "PREVIEW" and not TEST_RUN
 )
 
 # Django debug toolbar setup
