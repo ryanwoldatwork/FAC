@@ -504,9 +504,7 @@ STATE_ABBREVS = json.load(open(f"{SCHEMA_BASE_DIR}/States.json"))[
     "UnitedStatesStateAbbr"
 ]
 
-ENABLE_DEBUG_TOOLBAR = (
-    env.bool("ENABLE_DEBUG_TOOLBAR", False) and ENVIRONMENT == "PREVIEW" and not TEST_RUN
-)
+ENABLE_DEBUG_TOOLBAR = True
 
 # Django debug toolbar setup
 if ENABLE_DEBUG_TOOLBAR:
