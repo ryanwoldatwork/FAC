@@ -14,14 +14,14 @@ export function testSearch(){
 
     cy.get('#uei-or-ein').clear().type('D7A4J33FUMJ1');
     cy.get('#aln').clear().type('93');
-    cy.get('#entity-name').clear().type('Some Important Auditee Firm');
+    //cy.get('#entity-name').clear().type('');
 
     cy.get('#start-date').type('02/01/2024');
     cy.get('#end-date').type('02/28/2024');
 
     cy.get('#options').select('oversight').should('have.value','oversight');
 
-    cy.get('#agency-name').type('Over-93');
+    cy.get('#agency-name').type('93');
 
     cy.get('#auditee_state').select('VA').should('have.value','VA');
 
