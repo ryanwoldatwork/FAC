@@ -111,6 +111,62 @@ class Finding(models.Model):
         help_text=docs.type_requirement_findings,
     )
 
+class OversightSearch(models.Model):
+    report_id = models.ForeignKey(
+        "General",
+        help_text=REPORT_ID_FK_HELP_TEXT,
+        on_delete=models.CASCADE,
+        to_field="report_id",
+        db_column="report_id",
+    )
+    federal_agency_prefix = models.TextField(
+        "2-char code refers to an agency",
+    )
+    federal_award_extension = models.TextField(
+        "3-digit extn for a program defined by the agency",
+    )
+    findings_count = models.IntegerField(
+        "Number of findings for the federal program (only available for audit years 2013 and beyond)",
+        help_text=docs.findings_count,
+    )
+    is_direct = models.TextField(
+        "Indicate whether or not the award was received directly from a Federal awarding agency",
+        help_text=docs.direct,
+    )
+    is_direct = models.TextField(
+        "Indicate whether or not the award was received directly from a Federal awarding agency",
+        help_text=docs.direct,
+    )
+    is_major = models.TextField(
+        "Indicate whether or not the Federal program is a major program",
+        help_text=docs.major_program,
+    )
+    is_material_weakness = models.TextField(
+        "Material Weakness finding",
+        help_text=docs.material_weakness_findings,
+    )
+    is_modified_opinion = models.TextField(
+        "Modified Opinion finding", help_text=docs.modified_opinion
+    )
+    is_other_findings = models.TextField(
+        "Other findings", help_text=docs.other_findings
+    )
+    is_other_matters = models.TextField(
+        "Other non-compliance", help_text=docs.other_non_compliance
+    )
+    is_questioned_costs = models.TextField(
+        "Questioned Costs", help_text=docs.questioned_costs_findings
+    )
+    is_repeat_finding = models.TextField(
+        "Indicates whether or not the audit finding was a repeat of an audit finding in the immediate prior audit",
+        help_text=docs.repeat_finding,
+    )
+    is_significant_deficiency = models.TextField(
+        "Significant Deficiency finding",
+        help_text=docs.significant_deficiency_findings,
+    )
+
+
 
 class FederalAward(models.Model):
     """Information about the federal award section of the form. References General"""
