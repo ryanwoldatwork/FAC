@@ -119,6 +119,21 @@ class OversightSearch(models.Model):
         to_field="report_id",
         db_column="report_id",
     )
+    award_reference = models.TextField(
+        "Order that the award line was reported",
+    )
+    reference_number = models.TextField(
+        "Findings Reference Numbers",
+        help_text=docs.finding_ref_nums_findings,
+    )
+
+    audit_year = models.TextField(
+        "Audit year from fy_start_date.",
+        help_text=docs.audit_year_general,
+    )
+    fac_accepted_date = models.DateField(
+        "The date at which the audit transitioned to 'accepted'",
+    )
     federal_agency_prefix = models.TextField(
         "2-char code refers to an agency",
     )
@@ -140,6 +155,10 @@ class OversightSearch(models.Model):
     is_major = models.TextField(
         "Indicate whether or not the Federal program is a major program",
         help_text=docs.major_program,
+    )
+    amount_expended = models.BigIntegerField(
+        "Amount Expended for the Federal Program",
+        help_text=docs.amount,
     )
     is_material_weakness = models.TextField(
         "Material Weakness finding",
