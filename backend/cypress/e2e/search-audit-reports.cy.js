@@ -11,17 +11,11 @@ import {
   testMajorProgram
 } from '../support/search-audit-reports.js';
 
-    // describe('Test Search Page', () => {
-    //     it('Display the search page', () => {
-    //       testSearch();
-    //     });
-    //   });
-
-      // describe('Test Audit Year Checkbox', () => {
-      //   it('checks Audit Years', () => {
-      //     testAuditYearCheckbox();
-      //   });
-      // });
+      describe('Test Audit Year Checkbox', () => {
+        it('checks Audit Years', () => {
+          testAuditYearCheckbox();
+        });
+      });
 
       describe('Test UEI or EIN Field', () => {
         it('checks UEI or EIN', () => {
