@@ -14,7 +14,7 @@ BEGIN
     SELECT api_v1_0_3_functions.has_tribal_data_access() INTO v_has_permission;
 
     -- Check if the provided API key exists in tribal_api_access_key_ids
-    -- Test for gpg keys
+    -- Test for gpg keys test
     SELECT 
         EXISTS(
             SELECT 1
