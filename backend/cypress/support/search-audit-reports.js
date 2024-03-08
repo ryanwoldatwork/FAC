@@ -1,8 +1,4 @@
 
-beforeEach(() => {
-    cy.visit('/dissemination/search/');
-});
-
 export function testAuditYearCheckbox(){
     const yearsToCheck = ['all_years','2023','2022','2021','2020','2019','2018','2017','2016'];
     cy.get('#audit-year-2023').uncheck({force: true}).should('not.be.checked');
