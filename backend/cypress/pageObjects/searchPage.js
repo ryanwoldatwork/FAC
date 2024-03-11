@@ -47,10 +47,10 @@ testName(value) {
     cy.get(this.entityNameField).clear().type(value);
 }
 
-testFACacceptanceDate(value) {
+testFACacceptanceDate(startDate, endDate) {
     cy.get(this.accordionButton).contains('FAC acceptance date').as('accordionButton').click();
-    cy.get(this.startDateField).clear().type(value);
-    cy.get(this.endDateField).clear().type(value);
+    cy.get(this.startDateField).clear().type(startDate);
+    cy.get(this.endDateField).clear().type(endDate);
 }
 
 testState(value) {
@@ -105,7 +105,7 @@ uncheckMajorProgramRadio(value){
 }
 
 testSearchSubmitButton(){
-    cy.get(this.searchSubmitButton).click();
+    cy.get(`${this.searchSubmitButton}:last`).click();
 }
 
 }

@@ -1,9 +1,60 @@
 import searchPage from '../pageObjects/searchPage.js';
 
 let search;
+let yearsToCheck;
+let ueiOrein;
+let aln;
+let name;
+let accDate;
+let state;
+let cogOrover;
+let findings;
+let directFunding;
+let majorProgram;
 
 beforeEach(() => {
   cy.visit('/dissemination/search/');
+  
+  cy.fixture('searchPageData/auditYears.json').then((data) => {
+    yearsToCheck = data.yearsToCheck;
+  })
+
+  cy.fixture('searchPageData/uei-ein.json').then((data) => {
+    ueiOrein = data.ueiOrein;
+  })
+
+  cy.fixture('searchPageData/aln.json').then((data) => {
+    aln = data.aln;
+  })
+
+  cy.fixture('searchPageData/name.json').then((data) => {
+    name = data.name;
+  })
+
+  cy.fixture('searchPageData/accDate.json').then((data) => {
+    accDate = data.accDate;
+  })
+
+  cy.fixture('searchPageData/state.json').then((data) => {
+    state = data.state;
+  })
+
+  cy.fixture('searchPageData/cog-over.json').then((data) => {
+    cogOrover = data.cogOrover;
+  })
+
+  cy.fixture('searchPageData/auditFindings.json').then((data) => {
+    findings = data.findings;
+  })
+
+  cy.fixture('searchPageData/directFunding.json').then((data) => {
+    directFunding = data.directFunding;
+  })
+
+  cy.fixture('searchPageData/majorProgram.json').then((data) => {
+    majorProgram = data.majorProgram;
+  })
+
   search = new searchPage();
 });
 
@@ -11,7 +62,6 @@ beforeEach(() => {
         it('checks Audit Years', () => {
           search.checkAuditYearCheckbox('2023');
           search.uncheckAuditYearCheckbox('2023');
-          const yearsToCheck = ['all_years','2023','2022','2021','2020','2019','2018','2017','2016'];
           yearsToCheck.forEach((year) => {
             search.checkAuditYearCheckbox(year);
           });
@@ -23,48 +73,49 @@ beforeEach(() => {
 
       describe('Test UEI or EIN Field', () => {
         it('checks UEI or EIN', () => {
-          search.testUEIorEin('D7A4J33FUMJ1');
+          search.testUEIorEin(ueiOrein);
         });
       });
 
       describe('Test ALN(CFDA) Field', () => {
         it('checks ALN', () => {
-          search.testALN('93');
+          search.testALN(aln);
         });
       });
 
       describe('Test Name Field', () => {
         it('checks Name of Entity, Auditee, or Auditor', () => {
-          search.testName('Audit McAuditee');
+          search.testName(name);
         });
       });
 
       describe('Test FAC Acceptance Date Field', () => {
         it('checks FAC acceptance date', () => {
-          search.testFACacceptanceDate('03/01/2024', '03/31/2024');
+          const [startDate, endDate] = accDate;
+          search.testFACacceptanceDate(startDate, endDate);
         });
       });
 
       describe('Test State Field', () => {
         it('checks State', () => {
-          search.testState('VA');
+          search.testState(state);
         });
       });
 
       describe('Test Cog or Over Field', () => {
         it('checks Cog or Over', () => {
-          search.testCogorOver('oversight');
+          const [cog, over] = cogOrover;
+          search.testCogorOver(over);
         });
       });
 
       describe('Test Audit Findings Checkbox', () => {
         it('checks Audit Findings', () => {
           search.openFindingsAccordion();
-          const auditFindingsCheckbox = ['all_findings', 'is_modified_opinion', 'is_other_findings', 'is_material_weakness', 'is_significant_deficiency', 'is_other_matters', 'is_questioned_costs', 'is_repeat_finding'];
-          auditFindingsCheckbox.forEach((findings) => {
+          findings.forEach((findings) => {
             search.checkAuditFindingsCheckbox(findings);
           });
-          auditFindingsCheckbox.forEach((findings) => {
+          findings.forEach((findings) => {
             search.uncheckAuditFindingsCheckbox(findings);
           })
         });
@@ -73,11 +124,10 @@ beforeEach(() => {
       describe('Test Direct Funding Field', () => {
         it('checks Direct Funding', () => {
           search.openDirectFundingAccordion();
-          const directFundingCheckbox = ['direct_funding', 'passthrough_funding'];
-          directFundingCheckbox.forEach((funding) => {
+          directFunding.forEach((funding) => {
             search.checkDirectFundingCheckbox(funding);
           });
-          directFundingCheckbox.forEach((funding) => {
+          directFunding.forEach((funding) => {
             search.uncheckDirectFundingCheckbox(funding);
           });
         });
@@ -86,16 +136,17 @@ beforeEach(() => {
       describe('Test Major Program Field', () => {
         it('checks Major Program', () => {
           search.openMajorProgramAccordion();
-          search.checkMajorProgramRadio('True');
-          search.uncheckMajorProgramRadio('False');
+          const [T, F] = majorProgram;
+          search.checkMajorProgramRadio(T);
+          search.uncheckMajorProgramRadio(F);
         });
       });
 
-      // describe('Test Search Submit', () => {
-      //   it('clicks Search Submit Button', () => {
-      //     search.testSearchSubmitButton();
-      //   });
-      // });
+      describe('Test Search Submit', () => {
+        it('clicks Search Submit Button', () => {
+          search.testSearchSubmitButton();
+        });
+      });
 
 
       
