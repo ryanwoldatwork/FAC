@@ -34,7 +34,9 @@ def search_general(base_model, params=None):
 
     ##############
     # UEI/EIN
-    q_uei = _get_uei_or_eins_match_query(params.get("uei_or_eins", []), params.get("uei_or_ein_flag_migrated", None))
+    q_uei = _get_uei_or_eins_match_query(
+        params.get("uei_or_eins", []), params.get("uei_or_ein_flag_migrated", None)
+    )
     r_uei = base_model.objects.filter(q_uei)
 
     ##############

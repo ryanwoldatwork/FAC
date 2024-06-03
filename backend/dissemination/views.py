@@ -120,7 +120,9 @@ def run_search(form_data):
             "findings": form_data["findings"],
             "major_program": form_data["major_program"],
             "passthrough_name": form_data["passthrough_name"],
-            "passthrough_name_flag_migrated": form_data["passthrough_name_flag_migrated"],
+            "passthrough_name_flag_migrated": form_data[
+                "passthrough_name_flag_migrated"
+            ],
             "type_requirement": form_data["type_requirement"],
         }
         search_parameters.update(advanced_parameters)
