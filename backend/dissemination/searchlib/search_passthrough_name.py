@@ -14,6 +14,14 @@ def search_passthrough_name(general_results, params):
     t0 = time.time()
     q = Q()
     passthrough_names = params.get("passthrough_name", [])
+    passthrough_name_flag_migrated = params.get("passthrough_name_flag_migrated", False)
+
+    print("hello!")
+    print(passthrough_names)
+    print(passthrough_name_flag_migrated)
+
+    if passthrough_name_flag_migrated:
+        passthrough_names.append("GSA_MIGRATION")
 
     if not passthrough_names:
         return general_results

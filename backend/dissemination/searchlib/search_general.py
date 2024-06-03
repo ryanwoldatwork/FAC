@@ -34,7 +34,7 @@ def search_general(base_model, params=None):
 
     ##############
     # UEI/EIN
-    q_uei = _get_uei_or_eins_match_query(params.get("uei_or_eins", None))
+    q_uei = _get_uei_or_eins_match_query(params.get("uei_or_eins", []), params.get("uei_or_ein_flag_migrated", None))
     r_uei = base_model.objects.filter(q_uei)
 
     ##############
@@ -93,7 +93,10 @@ def report_timing(tag, params, start, end):
     logger.info(f"SEARCH_TIMING {hex(id(params))[8:]} {tag} {readable}ms")
 
 
-def _get_uei_or_eins_match_query(uei_or_eins):
+def _get_uei_or_eins_match_query(uei_or_eins, uei_or_ein_flag_migrated):
+    if uei_or_ein_flag_migrated:
+        uei_or_eins.append("GSA_MIGRATION")
+
     if not uei_or_eins:
         return Q()
 

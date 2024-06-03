@@ -104,6 +104,7 @@ def run_search(form_data):
         "report_id": form_data["report_id"],
         "start_date": form_data["start_date"],
         "uei_or_eins": form_data["uei_or_ein"],
+        "uei_or_ein_flag_migrated": form_data["uei_or_ein_flag_migrated"],
         "order_by": form_data["order_by"],
         "order_direction": form_data["order_direction"],
     }
@@ -119,6 +120,7 @@ def run_search(form_data):
             "findings": form_data["findings"],
             "major_program": form_data["major_program"],
             "passthrough_name": form_data["passthrough_name"],
+            "passthrough_name_flag_migrated": form_data["passthrough_name_flag_migrated"],
             "type_requirement": form_data["type_requirement"],
         }
         search_parameters.update(advanced_parameters)

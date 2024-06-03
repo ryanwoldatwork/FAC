@@ -6,4 +6,14 @@
             {% comment %} aria-expanded={% if form_user_input.uei_or_ein %}"true"{% else %}"false"{% endif %} {% endcomment %}
             aria-controls="uei-or-ein">UEI or EIN</button>
 </label>
-<textarea class="usa-textarea" id="uei-or-ein" name="uei_or_ein">{{form_user_input.uei_or_ein}}</textarea>
+<div id="uei-or-ein">
+    <textarea class="usa-textarea" name="uei_or_ein">{{form_user_input.uei_or_ein}}</textarea>
+    <div class="usa-checkbox bg-base-lighter">
+        <input class="usa-checkbox__input"
+                id="uei_or_ein_flag_migrated"
+                name="uei_or_ein_flag_migrated" type="checkbox"
+                value="True"
+                {% if form_user_input.uei_or_ein_flag_migrated %}checked{% endif %} />
+        <label class="usa-checkbox__label" for="uei_or_ein_flag_migrated">Include audits with missing UEIs?</label>
+    </div>
+</div>

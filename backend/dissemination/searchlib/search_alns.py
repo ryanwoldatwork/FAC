@@ -68,7 +68,7 @@ def _build_aln_q(full_alns, agency_numbers):
     if full_alns:
         for full_aln in full_alns:
             q |= Q(federal_agency_prefix=full_aln.prefix) & Q(
-                federal_award_extension=full_aln.program
+                federal_award_extension__in=[full_aln.program, "GSA_MIGRATION"]
             )
 
     return q

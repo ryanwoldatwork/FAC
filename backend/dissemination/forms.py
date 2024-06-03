@@ -91,10 +91,12 @@ class AdvancedSearchForm(forms.Form):
         choices=major_program_choices, required=False
     )
     passthrough_name = forms.CharField(required=False)
+    passthrough_name_flag_migrated = forms.BooleanField(required=False)
     report_id = forms.CharField(required=False)
     start_date = forms.DateField(required=False)
     type_requirement = forms.CharField(required=False)
     uei_or_ein = forms.CharField(required=False)
+    uei_or_ein_flag_migrated = forms.BooleanField(required=False)
 
     # Display params
     limit = forms.CharField(required=False)
@@ -223,6 +225,7 @@ class SearchForm(forms.Form):
     report_id = forms.CharField(required=False)
     start_date = forms.DateField(required=False)
     uei_or_ein = forms.CharField(required=False)
+    uei_or_ein_flag_migrated = forms.BooleanField(required=False)
 
     # Display params
     limit = forms.CharField(required=False)
