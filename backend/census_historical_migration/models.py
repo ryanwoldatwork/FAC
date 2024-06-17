@@ -5,7 +5,7 @@ from django.utils import timezone
 class ELECAUDITHEADER(models.Model):
     ELECAUDITHEADERID = models.TextField(blank=True, null=True)
 
-    ID = models.TextField(blank=True, null=True, db_column="CENSUSID")
+    ID = models.TextField(blank=True, null=True)
 
     AUDITYEAR = models.TextField(blank=True, null=True)
 
@@ -193,7 +193,7 @@ class ELECAUDITHEADER(models.Model):
 
 
 class ELECEINS(models.Model):
-    ID = models.TextField(blank=True, null=True, db_column="CENSUSID")
+    ID = models.TextField(blank=True, null=True)
 
     AUDITYEAR = models.TextField(blank=True, null=True)
 
@@ -243,7 +243,7 @@ class ELECAUDITFINDINGS(models.Model):
 
 
 class ELECNOTES(models.Model):
-    ID = models.TextField(blank=True, null=True, db_column="CENSUSID")
+    ID = models.TextField(blank=True, null=True)
 
     REPORTID = models.TextField(blank=True, null=True)
 
@@ -291,7 +291,7 @@ class ELECFINDINGSTEXT(models.Model):
 
 
 class ELECCPAS(models.Model):
-    ID = models.TextField(blank=True, null=True, db_column="CENSUSID")
+    ID = models.TextField(blank=True, null=True)
 
     AUDITYEAR = models.TextField(blank=True, null=True)
 
@@ -399,7 +399,7 @@ class ELECAUDITS(models.Model):
 
 
 class ELECPASSTHROUGH(models.Model):
-    ID = models.TextField(blank=True, null=True, db_column="CENSUSID")
+    ID = models.TextField(blank=True, null=True)
 
     AUDITYEAR = models.TextField(blank=True, null=True)
 
