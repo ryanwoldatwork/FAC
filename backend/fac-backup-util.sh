@@ -45,8 +45,8 @@ elif [ "$run_option" == "deploy_backup" ]; then
     GetUtil
     InstallAWS
     gonogo "install_aws"
-    RDSToRDS "$db_name" "$backup_db_name" "backup"
-    gonogo "db_to_db"
+    RDSToS3Dump "$db_name" "$backup_s3_name" "deploy/$initial_date"
+    gonogo "db_to_s3"
     AWSS3Sync "$s3_name" "$backup_s3_name"
     gonogo "s3_sync"
 elif [ "$run_option" == "scheduled_backup" ]; then
