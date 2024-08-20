@@ -94,7 +94,7 @@
                 </fieldset>
                 <fieldset class="usa-fieldset question">
                     <legend class="usa-legend">
-                        Did this entity spend $750,000 or more in federal awards during its audit period in accordance with
+                        Did this entity spend ${{ threshold_minimum }} or more in federal awards during its audit period in accordance with
                         Uniform
                         Guidance?
                         <abbr title="required" class="usa-hint usa-hint--required">*</abbr>
@@ -118,9 +118,9 @@
                                aria-required="true"
                                required/>
                         <label class="usa-radio__label" for="spend-no">No</label>
-                        <span class="usa-error-message">You only need to submit a report for an entity that spent $750,000
+                        <span class="usa-error-message">You only need to submit a report for an entity that spent ${{ threshold_minimum }}
                             or more in federal awards during its audit period (fiscal period beginning dates on or after
-                        12/26/2014).</span>
+                        {{ threshold_date }}).</span>
                     </div>
                 </fieldset>
                 <fieldset class="usa-fieldset question">

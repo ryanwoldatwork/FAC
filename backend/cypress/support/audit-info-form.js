@@ -25,8 +25,8 @@ export function testAuditInformationForm() {
     cy.get(item).click({ force: true });
   });
 
-  // Enter 750000 into the dollar theshold number field.
-  cy.get('#dollar_threshold').type('750000');
+  // Enter 1000000 into the dollar theshold number field.
+  cy.get('#dollar_threshold').type('1000000');
   cy.get('#dollar_threshold').blur();
 
   // Select 0 and 1 for the multiple select agencies field.

@@ -15,6 +15,7 @@ import os
 import sys
 import logging
 import json
+import datetime
 from .db_url import get_db_url_from_vcap_services
 import environs
 from cfenv import AppEnv
@@ -544,7 +545,23 @@ OMB_EXP_DATE = "09/30/2026"
 
 # APP-level constants
 CENSUS_DATA_SOURCE = "CENSUS"
-DOLLAR_THRESHOLD = 750000
+DOLLAR_THRESHOLDS = [
+    {
+        "start": None,
+        "end": datetime.date(2014, 12, 25),
+        "minimum": 500000,
+    },
+    {
+        "start": datetime.date(2014, 12, 26),
+        "end": datetime.date(2024, 9, 30),
+        "minimum": 750000,
+    },
+    {
+        "start": datetime.date(2024, 10, 1),
+        "end": None,
+        "minimum": 1000000,
+    },
+]
 SUMMARY_REPORT_DOWNLOAD_LIMIT = 1000
 DEFAULT_MAX_ROWS = (
     10000  # A version of this constant also exists in schemas.scrpits.render.py

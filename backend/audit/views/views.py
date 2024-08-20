@@ -1,3 +1,4 @@
+import datetime
 import logging
 
 from django.views import generic
@@ -57,6 +58,7 @@ from audit.validators import (
     validate_notes_to_sefa_json,
     validate_secondary_auditors_json,
 )
+from audit.fixtures.single_audit_checklist import get_dollar_threshold
 
 from dissemination.remove_workbook_artifacts import remove_workbook_artifacts
 from dissemination.file_downloads import get_download_url, get_filename
@@ -82,6 +84,9 @@ class MySubmissions(LoginRequiredMixin, generic.View):
         template_name = "audit/my_submissions.html"
         new_link = "report_submission"
         edit_link = "audit:EditSubmission"
+        threshold = "{:,}".format(
+            get_dollar_threshold(datetime.date.today())["minimum"]
+        )
 
         submissions = MySubmissions.fetch_my_submissions(request.user)
 
@@ -97,6 +102,7 @@ class MySubmissions(LoginRequiredMixin, generic.View):
             "data": data,
             "new_link": new_link,
             "edit_link": edit_link,
+            "threshold": threshold,
         }
         return render(request, template_name, context)
 

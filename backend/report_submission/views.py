@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime
+from datetime import datetime, date
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import BadRequest, PermissionDenied, ValidationError
@@ -20,6 +20,7 @@ from audit.validators import validate_general_information_json
 from audit.utils import Util
 from audit.models.models import ExcelFile
 from audit.fixtures.excel import FORM_SECTIONS
+from audit.fixtures.single_audit_checklist import get_dollar_threshold
 from config.settings import STATIC_SITE_URL, STATE_ABBREVS
 
 from report_submission.forms import AuditeeInfoForm, GeneralInformationForm
@@ -37,6 +38,12 @@ class EligibilityFormView(LoginRequiredMixin, View):
     def get(self, request):
         args = {}
         args["step"] = 1
+        args["threshold_minimum"] = "{:,}".format(
+            get_dollar_threshold(date.today())["minimum"]
+        )
+        args["threshold_date"] = get_dollar_threshold(date.today())["start"].strftime(
+            "%m/%d/%Y"
+        )
         return render(request, "report_submission/step-1.html", args)
 
     # render eligibility form

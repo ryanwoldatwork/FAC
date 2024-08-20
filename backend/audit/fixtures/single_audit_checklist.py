@@ -19,6 +19,8 @@ import audit.validators
 from audit.fixtures.excel import FORM_SECTIONS
 from users.models import User
 
+from config.settings import DOLLAR_THRESHOLDS
+
 logger = logging.getLogger(__name__)
 
 
@@ -252,3 +254,12 @@ def load_single_audit_checklists_for_email_address(user_email, workbooks=None):
         return
 
     _load_single_audit_checklists_for_user(user)
+
+
+def get_dollar_threshold(date):
+    """Return required dollar threshold for a federal single audit based on date."""
+    for threshold in DOLLAR_THRESHOLDS:
+        if threshold["end"] == None or date <= threshold["end"]:
+            if threshold["start"] == None or date >= threshold["start"]:
+                return threshold
+    return None

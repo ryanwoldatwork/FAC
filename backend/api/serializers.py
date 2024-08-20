@@ -1,10 +1,12 @@
 import json
+import datetime
 
 from rest_framework import serializers
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from audit.models import SingleAuditChecklist, Access
+from audit.fixtures.single_audit_checklist import get_dollar_threshold
 from api.uei import get_uei_info_from_sam_gov
 from audit.validators import (
     validate_general_information_json,
@@ -13,9 +15,6 @@ from config.settings import CHARACTER_LIMITS_GENERAL
 
 
 # Eligibility step messages
-SPENDING_THRESHOLD = _(
-    "The FAC only accepts submissions from non-Federal entities that spend $750,000 or more in federal awards during its audit period (fiscal period begin dates on or after 12/26/2014) in accordance with Uniform Guidance"
-)
 USA_BASED = _("The FAC only accepts submissions from U.S.-based entities")
 USER_PROVIDED_ORG_TYPE = _(
     "The FAC only accepts submissions from States, Local governments, Indian tribes or Tribal organizations, Institutions of higher education (IHEs), and Non-profits"
@@ -63,7 +62,10 @@ class EligibilitySerializer(serializers.Serializer):
 
     def validate_met_spending_threshold(self, value):
         if not value:
-            raise serializers.ValidationError(SPENDING_THRESHOLD)
+            threshold = get_dollar_threshold(datetime.date.today())
+            raise serializers.ValidationError(
+                f"The FAC only accepts submissions from non-Federal entities that spend ${"{:,}".format(threshold['minimum'])} or more in federal awards during its audit period (fiscal period begin dates on or after {threshold['start'].strftime("%m/%d/%Y")}) in accordance with Uniform Guidance"
+            )
         return value
 
     def validate_user_provided_organization_type(self, value):
