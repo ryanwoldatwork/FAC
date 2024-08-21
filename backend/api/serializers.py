@@ -64,7 +64,7 @@ class EligibilitySerializer(serializers.Serializer):
         if not value:
             threshold = get_dollar_threshold(datetime.date.today())
             raise serializers.ValidationError(
-                f"The FAC only accepts submissions from non-Federal entities that spend ${"{:,}".format(threshold['minimum'])} or more in federal awards during its audit period (fiscal period begin dates on or after {threshold['start'].strftime("%m/%d/%Y")}) in accordance with Uniform Guidance"
+                f"The FAC only accepts submissions from non-Federal entities that spend ${'{:,}'.format(threshold['minimum'])} or more in federal awards during its audit period (fiscal period begin dates on or after {threshold['start'].strftime('%m/%d/%Y')}) in accordance with Uniform Guidance"
             )
         return value
 
