@@ -13,8 +13,9 @@ logger = logging.getLogger(__name__)
 COG_LIMIT = 50_000_000
 DA_THRESHOLD_FACTOR = 0.25
 
+BASE_YEAR = "2024"
 
-def compute_cog_over(federal_awards, submission_status, auditee_ein, auditee_uei):
+def compute_cog_over(federal_awards, submission_status, auditee_ein, auditee_uei, base_year=BASE_YEAR):
     """
     Compute cog or oversight agency for the sac.
     Return tuple (cog_agency, oversight_agency)
@@ -45,7 +46,7 @@ def compute_cog_over(federal_awards, submission_status, auditee_ein, auditee_uei
         oversight_agency = agency
         # logger.warning("Assigning an oversight agenct", oversight_agency)
         return (cognizant_agency, oversight_agency)
-    cognizant_agency = determine_hist_agency(auditee_ein, auditee_uei)
+    cognizant_agency = determine_hist_agency(auditee_ein, auditee_uei, base_year)
     if cognizant_agency:
         return (cognizant_agency, oversight_agency)
     cognizant_agency = agency
@@ -77,16 +78,18 @@ def determine_agency(total_amount_expended, max_total_agency, max_da_agency):
         return agency
 
 
-def determine_hist_agency(ein, uei):
-    dbkey = get_dbkey(ein, uei)
+def determine_hist_agency(ein, uei, base_year):
+    dbkey = None
+    if base_year == "2019":
+        dbkey = get_dbkey(ein, uei)
 
     cog_agency = lookup_baseline(ein, uei, dbkey)
     if cog_agency:
         return cog_agency
-    (gen_count, total_amount_expended, report_id_2019) = get_2019_gen(ein, uei)
+    (gen_count, total_amount_expended, report_id_base_year) = get_base_gen(ein, uei, base_year)
     if gen_count != 1:
         return None
-    cfdas = get_2019_cfdas(report_id_2019)
+    cfdas = get_base_cfdas(report_id_base_year)
     if not cfdas:
         # logger.warning("Found no cfda data for dbkey {dbkey} in 2019")
         return None
@@ -136,10 +139,10 @@ def lookup_baseline(ein, uei, dbkey):
     return cognizant_agency
 
 
-def get_2019_gen(ein, uei):
+def get_base_gen(ein, uei, base_year):
     gens = General.objects.annotate(
         amt=Cast("total_amount_expended", output_field=BigIntegerField())
-    ).filter(Q(auditee_ein=ein), Q(auditee_uei=uei), Q(audit_year="2019"))
+    ).filter(Q(auditee_ein=ein), Q(auditee_uei=uei), Q(audit_year=base_year))
 
     if len(gens) != 1:
         return (len(gens), 0, None)
@@ -147,7 +150,7 @@ def get_2019_gen(ein, uei):
     return (1, gen.amt, gen.report_id)
 
 
-def get_2019_cfdas(report_id):
+def get_base_cfdas(report_id):
     cfdas = FederalAward.objects.annotate(
         amt=Cast("amount_expended", output_field=BigIntegerField())
     ).filter(Q(report_id=report_id))
