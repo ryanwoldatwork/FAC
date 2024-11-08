@@ -45,12 +45,12 @@ def compute_cog_over(federal_awards, submission_status, auditee_ein, auditee_uei
     if total_amount_expended <= COG_LIMIT:
         oversight_agency = agency
         # logger.warning("Assigning an oversight agenct", oversight_agency)
-        return (cognizant_agency, oversight_agency)
-    cognizant_agency = determine_hist_agency(auditee_ein, auditee_uei, base_year)
+        return (cognizant_agency, oversight_agency, None)
+    cognizant_agency, cog_is_calculated = determine_hist_agency(auditee_ein, auditee_uei, base_year)
     if cognizant_agency:
-        return (cognizant_agency, oversight_agency)
+        return (cognizant_agency, oversight_agency, cog_is_calculated)
     cognizant_agency = agency
-    return (cognizant_agency, oversight_agency)
+    return (cognizant_agency, oversight_agency, cog_is_calculated)
 
 
 def calc_award_amounts(awards):
@@ -83,23 +83,26 @@ def determine_hist_agency(ein, uei, base_year):
     if base_year == "2019":
         dbkey = get_dbkey(ein, uei)
 
+    cog_is_calculated = 0
     cog_agency = lookup_baseline(ein, uei, dbkey)
     if cog_agency:
-        return cog_agency
+        return cog_agency, cog_is_calculated
+
+    cog_is_calculated = 1
     (gen_count, total_amount_expended, report_id_base_year) = get_base_gen(ein, uei, base_year)
     if gen_count != 1:
-        return None
+        return None, None
     cfdas = get_base_cfdas(report_id_base_year)
     if not cfdas:
         # logger.warning("Found no cfda data for dbkey {dbkey} in 2019")
-        return None
+        return None, None
     (max_total_agency, max_da_agency) = calc_cfda_amounts(cfdas)
     cognizant_agency = determine_agency(
         total_amount_expended,
         max_total_agency,
         max_da_agency,
     )
-    return cognizant_agency
+    return cognizant_agency, cog_is_calculated
 
 
 def get_dbkey(ein, uei):
