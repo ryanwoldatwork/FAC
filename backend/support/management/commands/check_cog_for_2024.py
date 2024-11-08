@@ -38,7 +38,7 @@ class Command(BaseCommand):
             return
 
         df = pd.DataFrame(columns=['cog_in_Prod_w_2019_base', 'cog_w_2024_base'])
-        
+
         print("Getting data from General\n")
         gens = General.objects.annotate(
             amt=Cast("total_amount_expended", output_field=BigIntegerField())
@@ -53,7 +53,7 @@ class Command(BaseCommand):
             sac.oversight_agency = None
             sac.cognizant_agency = None
 
-            cognizant_agency, oversight_agency = compute_cog_over(
+            cognizant_agency, oversight_agency, cog_is_calculated = compute_cog_over(
                 sac.federal_awards, sac.submission_status, sac.general_information["ein"], sac.general_information["auditee_uei"]
             )
             if oversight_agency:
@@ -69,7 +69,7 @@ class Command(BaseCommand):
             if gen.oversight_agency == "":
                 gen.oversight_agency = None
 
-            if gen.cognizant_agency is not None:
+            if gen.cognizant_agency is not None and cog_is_calculated:
                 new_row = {'cog_in_Prod_w_2019_base': gen.cognizant_agency, 'cog_w_2024_base': sac.cognizant_agency}
                 df.loc[len(df)] = new_row
 
