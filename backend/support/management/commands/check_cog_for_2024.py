@@ -37,7 +37,7 @@ class Command(BaseCommand):
             print(f"Invalid year {year}.  Expecting 2024")
             return
 
-        df = pd.DataFrame(columns=['cog_in_Prod_w_2019_base', 'cog_w_2024_base'])
+        df = pd.DataFrame(columns=['auditee_ein', 'auditee_uei', 'cog_in_Prod_w_2019_base', 'cog_w_2024_base'])
 
         print("Getting data from General\n")
         gens = General.objects.annotate(
@@ -70,7 +70,12 @@ class Command(BaseCommand):
                 gen.oversight_agency = None
 
             if gen.cognizant_agency is not None and cog_is_calculated:
-                new_row = {'cog_in_Prod_w_2019_base': gen.cognizant_agency, 'cog_w_2024_base': sac.cognizant_agency}
+                new_row = {
+                    'auditee_ein': gen.auditee_ein,
+                    'auditee_uei': gen.auditee_uei,
+                    'cog_in_Prod_w_2019_base': gen.cognizant_agency, 
+                    'cog_w_2024_base': sac.cognizant_agency,
+                    }
                 df.loc[len(df)] = new_row
 
             if gen.cognizant_agency != sac.cognizant_agency:
